@@ -1,0 +1,29 @@
+baseurl = "/"
+title = "Hugo IndieWeb PoC"
+languageCode = "en-us"
+paginate = "10"        # Number of items per page
+theme = "soup"
+
+[Author] # Used in authorbox
+name = "Aaron Crowder"
+url = "https://crowdersoup.com"
+nickname = "CrowderSoup"
+avatar = "https://secure.gravatar.com/avatar/2574579885e58fc56cdb3af0c1cda01f?s=90"
+
+[Params]
+copyright = "Aaron Crowder"
+mainSections = ["posts"]
+dateFormat = "January 02, 2006"
+description = "A proof-of-concept for an IndieWeb site using Vercel Serverless funcs"
+
+[Params.elsewhere]
+email = "aaron.crowder@gmail.com"
+twitter = "CrowderSoup"
+mastodon = "https://hachyderm.io/@CrowderSoup"
+telegram = "CrowderSoup"
+github = "CrowderSoup"
+
+menu = ['main']
+
+[outputs]
+home = ["HTML", "RSS"]

@@ -1,0 +1,3 @@
+[submodule "themes/soup"]
+	path = themes/soup
+	url = git@github.com:CrowderSoup/soup.git
