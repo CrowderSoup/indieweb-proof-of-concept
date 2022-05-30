@@ -48,7 +48,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		ctx,
 		"CrowderSoup",
 		"indieweb-proof-of-concept",
-		"/content/posts",
+		"content/posts",
 		&file,
 	)
 	if err != nil {
