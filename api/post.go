@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/google/go-github/v45/github"
@@ -19,4 +20,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// list all repositories for the authenticated user
 	repos, _, err := client.Repositories.List(ctx, "", nil)
+	if err != nil {
+		fmt.Fprintf(w, err)
+		return
+	}
+
+	fmt.Fprintf(w, repos)
 }
