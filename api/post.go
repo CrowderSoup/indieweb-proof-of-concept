@@ -21,9 +21,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// list all repositories for the authenticated user
 	repos, _, err := client.Repositories.List(ctx, "", nil)
 	if err != nil {
-		fmt.Fprintf(w, err)
+		fmt.Fprintf(w, err.Error())
 		return
 	}
 
-	fmt.Fprintf(w, repos)
+	for _, repo := range repos {
+		fmt.Fprintf(w, *repo.FullName)
+	}
 }
