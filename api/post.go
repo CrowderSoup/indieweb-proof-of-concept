@@ -26,7 +26,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	client := github.NewClient(tc)
 
 	// list all repositories for the authenticated user
-	repos, _, err := client.Repositories.List(ctx, "", nil)
+	repos, _, err := client.Repositories.List(ctx, "CrowderSoup", nil)
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 		return
