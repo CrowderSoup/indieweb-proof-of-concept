@@ -11,6 +11,12 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	gitHubAccessToken := os.Getenv("GITHUB_PAT")
+	if gitHubAccessToken == "" {
+		fmt.Fprintf(w, "GITHUB_PAT (%s) is invalid", gitHubAccessToken)
+		return
+	}
+
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_PAT")},
