@@ -1,7 +1,7 @@
 ---
 title: "The Title"
 slug: "the-title"
-date: 2022-06-02 04:51
+date: "2022-06-02 04:51"
 type: note
 categories:
   
