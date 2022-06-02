@@ -14,14 +14,20 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
+	// Authorize Request
+	err := micropub.AuthorizeRequest(r)
+	if err != nil {
+		fmt.Fprintf(w, "Not Authorized")
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	// Ensure Content-Type is correct
 	headerContentTtype := r.Header.Get("Content-Type")
 	if headerContentTtype != "application/x-www-form-urlencoded" {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		return
 	}
-
-	// Create an empty context that won't be concelled
-	ctx := context.Background()
 
 	// Attempt to load the config from the environment
 	config, err := config.GetConfig()
@@ -42,12 +48,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Unable to build post: %s", err.Error())
 	}
 
-	ts := oauth2.StaticTokenSource(
+	// Create an empty context that won't be concelled
+	ctx := context.Background()
+
+	tokenSource := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: config.GitHubPersonalAccessToken},
 	)
-	tc := oauth2.NewClient(ctx, ts)
+	tokenClient := oauth2.NewClient(ctx, tokenSource)
 
-	client := github.NewClient(tc)
+	client := github.NewClient(tokenClient)
 
 	commiter := github.CommitAuthor{
 		Name:  &config.AuthorName,
