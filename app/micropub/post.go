@@ -23,18 +23,15 @@ type Post struct {
 const postTemplate = `---
 title: "{{ .Name }}"
 slug: "{{ .Slug }}"
-date: {{ .Date.Format "2006-01-02 15:04" }}
+date: {{ .Date.Format "2006-01-02T15:04:05" }}
 type: {{ .HEntry }}
-categories:
-  {{ range .Categories }}
+categories:{{ range .Categories }}
   - {{ . }}
-  {{ end }}
-tags:
-  {{ range .Tags }}
+{{ end }}
+tags:{{ range .Tags }}
   - {{ . }}
-  {{ end }}
+{{ end }}
 ---
-
 
 {{ .Content }}
 `
