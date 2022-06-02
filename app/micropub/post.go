@@ -17,6 +17,25 @@ type Post struct {
 	Date       time.Time
 }
 
+const postTemplate = `---
+title: "{{ .Name }}"
+slug: "{{ .Slug }}"
+date: {{ .Date.Format "2006-01-02 15:04" }}
+type: {{ .HEntry }}
+categories:
+  {{ range .Categories }}
+  - {{ . }}
+  {{ end }}
+tags:
+  {{ range .Tags }}
+  - {{ . }}
+  {{ end }}
+---
+
+
+{{ .Content }}
+`
+
 func GetPostFromForm(form url.Values) (*Post, string, error) {
 	hentry, ok := form["h-entry"]
 	if !ok {
@@ -52,7 +71,7 @@ func GetPostFromForm(form url.Values) (*Post, string, error) {
 		Date:       time.Now(),
 	}
 
-	tpl, err := template.New("post").ParseFiles("post.tpl")
+	tpl, err := template.New("post").Parse(postTemplate)
 	if err != nil {
 		return post, "", err
 	}
