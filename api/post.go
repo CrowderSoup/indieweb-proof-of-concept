@@ -85,7 +85,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		ctx,
 		"CrowderSoup",
 		"indieweb-proof-of-concept",
-		fmt.Sprintf("content/posts/%s.md", post.Slug),
+		fmt.Sprintf("content/posts/%s/%s/index.md", post.Date.Format("2006-01-02"), post.Slug),
 		&file,
 	)
 	if err != nil {
