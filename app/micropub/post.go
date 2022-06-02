@@ -6,12 +6,15 @@ import (
 	"html/template"
 	"net/url"
 	"time"
+
+	"github.com/gosimple/slug"
 )
 
 type Post struct {
 	HEntry     string
 	Content    string
 	Name       string
+	Slug       string
 	Categories []string
 	Tags       []string
 	Date       time.Time
@@ -66,6 +69,7 @@ func GetPostFromForm(form url.Values) (*Post, string, error) {
 		HEntry:     hentry[0],
 		Content:    content[0],
 		Name:       name[0],
+		Slug:       getSlug(name[0], content[0]),
 		Categories: categories,
 		Tags:       tags,
 		Date:       time.Now(),
@@ -83,4 +87,17 @@ func GetPostFromForm(form url.Values) (*Post, string, error) {
 	}
 
 	return post, b.String(), nil
+}
+
+func getSlug(name, content string) string {
+	if name == "" {
+		limit := 50
+		if len(content) < 50 {
+			limit = len(content)
+		}
+		name = content[:limit]
+	}
+
+	urlSlug := slug.Make(name)
+	return urlSlug
 }
