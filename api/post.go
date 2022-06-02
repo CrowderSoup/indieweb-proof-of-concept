@@ -46,6 +46,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	post, renderedContent, err := micropub.GetPostFromForm(r.Form)
 	if err != nil {
 		fmt.Fprintf(w, "Unable to build post: %s", err.Error())
+		return
 	}
 
 	// Create an empty context that won't be concelled
