@@ -1,37 +1,37 @@
-package handler
+package api
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/google/go-github/v45/github"
 	"golang.org/x/oauth2"
+
+	"github.com/crowdersoup/indieweb-proof-of-concept/app/config"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	gitHubAccessToken := os.Getenv("GITHUB_PAT")
-	if gitHubAccessToken == "" {
-		fmt.Fprintf(w, "GITHUB_PAT (%s) is invalid", gitHubAccessToken)
-		return
+	// Create an empty context that won't be concelled
+	ctx := context.Background()
+
+	// Attempt to load the config from the environment
+	config, err := config.GetConfig()
+	if err != nil {
+		fmt.Fprintf(w, "There was an error loading the config: %s", err.Error())
 	}
 
-	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_PAT")},
+		&oauth2.Token{AccessToken: config.GitHubPersonalAccessToken},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
 	client := github.NewClient(tc)
 
-	name := "Aaron Crowder"
-	email := "aaron.crowder@gmail.com"
-
 	commiter := github.CommitAuthor{
-		Name:  &name,
-		Email: &email,
+		Name:  &config.AuthorName,
+		Email: &config.AuthorEmail,
 	}
 	message := "A new file"
 	content := []byte("This is the content of the file")
