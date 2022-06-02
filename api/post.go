@@ -33,6 +33,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	config, err := config.GetConfig()
 	if err != nil {
 		fmt.Fprintf(w, "There was an error loading the config: %s", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -40,12 +41,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err = r.ParseForm()
 	if err != nil {
 		fmt.Fprintf(w, "Unable to parse form: %s", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	post, renderedContent, err := micropub.GetPostFromForm(r.Form)
 	if err != nil {
 		fmt.Fprintf(w, "Unable to build post: %s", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -87,12 +90,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	contentResponseJson, err := json.Marshal(contentResponse)
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	fmt.Fprintf(w, string(contentResponseJson))
+	w.WriteHeader(http.StatusOK)
 }
